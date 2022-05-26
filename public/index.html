@@ -6,19 +6,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File Uploader</title>
+    <link rel="stylesheet" href="./styles/index.css">
 </head>
 
 <body>
-    <h1>:)</h1>
-    <form method="post" enctype="multipart/form-data">
-        <label for="file-input">Please, upload a file</label>
-        <br>
-        <br>
-        <input type="file" name="file" id="file-input">
-        <br>
-        <br>
-        <button type="submit">Send</button>
-    </form>
+    <div class="main">
+        <h2>File Uploader App</h2>
+        <form method="post" enctype="multipart/form-data">
+            <label for="file-input">Please, upload a file</label>
+            <br>
+            <br>
+            <input type="file" name="file" id="file-input" class="file-input">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+    <footer class="footer">
+        <a href="https://github.com/Overk1lls" class="link">
+            © Yurii Pakhota
+        </a>
+    </footer>
 </body>
 
 </html>
