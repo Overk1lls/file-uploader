@@ -1,37 +1,33 @@
 import multer from "multer";
-import S3 from 'aws-sdk/clients/s3';
 import { Router } from "express";
-import { createReadStream, unlinkSync } from "fs";
-import { localConfig, s3 } from "../..";
+import { existsSync } from "fs";
 import { LogicError } from "../../errors/logic.error";
 import { ErrorCode } from "../../errors/codes";
 import { ServerError } from "../../errors/server.error";
+import { s3Service } from "../..";
 
 export const router = Router();
 export const upload = multer({ dest: './uploads' });
 
-router.post('/', upload.single('file'), (req, res, next) => {
+router.post('/', upload.single('file'), async (req, res, next) => {
     try {
-        if (!req.file) {
+        const { file } = req;
+        if (!file) {
             throw new LogicError(ErrorCode.FileIsNotFound);
         }
-        const fileName = `file/${req.file?.originalname}`;
-        const { bucketName } = localConfig;
 
-        const reqData: S3.PutObjectRequest = {
-            ACL: 'public-read',
-            Bucket: bucketName,
-            Key: fileName,
-            Body: createReadStream(req.file!.path)
-        };
-        s3.upload(reqData, (error, data) => {
-            if (error) {
-                throw new ServerError(ErrorCode.FileIsNotUploaded, error.message);
-            }
-            unlinkSync(req.file!.path);
+        const { path } = file;
+        if (!existsSync(path)) {
+            throw new ServerError(ErrorCode.FileIsNotFound);
+        }
 
-            res.json({ url: data.Location });
-        });
+        const uploadResult = await s3Service.uploadFile(file);
+
+        res.status(200).json(
+            typeof uploadResult === 'string' ?
+                { location: uploadResult } :
+                uploadResult
+        );
     } catch (error) {
         next(error);
     }
