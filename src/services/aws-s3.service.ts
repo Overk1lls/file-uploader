@@ -12,7 +12,7 @@ export class AWSS3Service {
     private readonly s3: S3;
     private readonly bucketName: string;
 
-    constructor(config: Pick<Config, 'accessKeyId' | 'bucketName' | 'secretAccessKey'>) {
+    constructor(config: Pick<Config, 'accessKeyId' | 'secretAccessKey' | 'bucketName'>) {
         const { accessKeyId, secretAccessKey, bucketName } = config;
         this.s3 = new S3({ accessKeyId, secretAccessKey });
         this.bucketName = bucketName;
