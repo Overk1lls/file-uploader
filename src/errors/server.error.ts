@@ -1,8 +1,8 @@
-import { ErrorCode } from "./codes";
-import { LogicError } from "./logic.error";
+import { ErrorCode } from './codes';
+import { LogicError } from './logic.error';
 
 export class ServerError extends LogicError {
-    constructor(code: ErrorCode, message?: string) {
-        super(code, message);
-    }
+  constructor(code: ErrorCode, message?: string) {
+    super(code, message);
+  }
 }

@@ -1,14 +1,14 @@
-import { ErrorCode } from "./codes";
+import { ErrorCode } from './codes';
 
 export interface ILogicError {
-    code: ErrorCode;
+  code: ErrorCode;
 }
 
 export class LogicError extends TypeError implements ILogicError {
-    readonly code: ErrorCode;
+  readonly code: ErrorCode;
 
-    constructor(code: ErrorCode, message?: string) {
-        super(message ?? code);
-        this.code = code;
-    }
+  constructor(code: ErrorCode, message?: string) {
+    super(message ?? code);
+    this.code = code;
+  }
 }
