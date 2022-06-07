@@ -4,7 +4,6 @@ import { FileFilterCallback } from 'multer';
 import { LogicError } from "../errors/logic.error";
 import { ErrorCode } from "../errors/codes";
 
-const filesUploadDestination = './uploads';
 /**
  * Only image, video, audio and applications files allowed.
  */
@@ -13,6 +12,7 @@ const mimetypeRegex = /^(image|video|audio|application)\//;
  * In bytes.
  */
 const fileSizeLimit = 52428800;
+const storage = multer.memoryStorage();
 
 const fileFilter = (
     req: IncomingMessage,
@@ -31,7 +31,7 @@ const fileFilter = (
 };
 
 export const multerFileUpload = multer({
-    dest: filesUploadDestination,
+    storage,
     fileFilter,
     limits: {
         fileSize: fileSizeLimit,

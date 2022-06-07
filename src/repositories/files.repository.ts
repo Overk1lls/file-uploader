@@ -1,5 +1,4 @@
 import S3 from 'aws-sdk/clients/s3';
-import { createReadStream } from 'fs';
 import { Config } from '../lib/config';
 
 const bucketDirName = 'file/';
@@ -14,17 +13,13 @@ export class FilesRepository {
         this.bucketName = bucketName;
     }
 
-    upload({ name, mimetype, pathToFile, file }: {
-        name: string,
-        mimetype: string,
-        pathToFile?: string,
-        file?: Buffer
-    }) {
+    uploadFile(file: Pick<Express.Multer.File, 'buffer' | 'originalname' | 'mimetype'>) {
+        const { buffer, originalname, mimetype } = file;
         const fileDataObject: S3.PutObjectRequest = {
             ACL: 'public-read',
             Bucket: this.bucketName,
-            Key: bucketDirName + name,
-            Body: pathToFile ? createReadStream(pathToFile) : file,
+            Key: bucketDirName + originalname,
+            Body: buffer,
             ContentType: mimetype,
         };
         return this.s3.upload(fileDataObject).promise();

@@ -1,5 +1,4 @@
 import imageSize from 'image-size';
-import { readFileSync } from 'fs';
 import { ErrorCode } from '../errors/codes';
 import { LogicError } from '../errors/logic.error';
 import { resizeImage } from '../lib/file';
@@ -15,30 +14,21 @@ export class AWSS3Service {
     }
 
     async uploadFile(file: Readonly<Express.Multer.File>) {
-        const { originalname, path, mimetype } = file;
+        const { buffer, mimetype } = file;
+
         if (!mimetype.includes(imgType)) {
-            const { Location } = await this.files.upload({
-                mimetype,
-                name: originalname,
-                pathToFile: path
-            });
+            const { Location } = await this.files.uploadFile(file);
             return Location;
         }
-        
-        const savedFile = readFileSync(path);
-        const dimensions = imageSize(savedFile);
 
+        const dimensions = imageSize(buffer);
         const { height, width } = dimensions;
         if (!height || !width) {
             throw new LogicError(ErrorCode.FileNotAppropriate);
         }
-        const appropriateSizeImg = await resizeImage({ file: savedFile, height, width });
+        const appropriateSizeImg = await resizeImage({ file: buffer, width, height });
 
-        const { Location } = await this.files.upload({
-            mimetype,
-            name: originalname,
-            file: appropriateSizeImg
-        });
+        const { Location } = await this.files.uploadFile({ ...file, buffer: appropriateSizeImg });
         return Location;
     }
 }
