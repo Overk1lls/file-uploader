@@ -1,10 +1,11 @@
 import { ErrorRequestHandler } from "express";
+import { MulterError } from "multer";
 import { ErrorCode } from "../../errors/codes";
 import { LogicError } from "../../errors/logic.error";
 import { ServerError } from "../../errors/server.error";
 
 enum ErrorHandlerResponse {
-    somethingWrong = 'SOMETHING_WENT_WRONG',
+    SomethingWrong = 'SOMETHING_WENT_WRONG',
 };
 
 export const RequestErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
@@ -16,7 +17,7 @@ export const RequestErrorHandler: ErrorRequestHandler = (err, req, res, next) =>
                     code: err.code,
                 });
             }
-            
+
             default: {
                 res.status(400).json({
                     error: 'File is not found!',
@@ -29,13 +30,31 @@ export const RequestErrorHandler: ErrorRequestHandler = (err, req, res, next) =>
         switch (err.code) {
             default: {
                 res.status(500).json({
-                    error: ErrorHandlerResponse.somethingWrong,
+                    error: ErrorHandlerResponse.SomethingWrong,
+                    code: ErrorCode.FileIsNotUploaded,
+                });
+                break;
+            }
+        }
+    } else if (err instanceof MulterError) {
+        switch (err.code) {
+            case 'LIMIT_FILE_SIZE': {
+                res.status(400).json({
+                    error: 'The file size is too big to upload!',
+                    code: err.code,
+                });
+                break;
+            }
+
+            default: {
+                res.status(400).json({
+                    error: 'Could not upload your file',
                     code: ErrorCode.FileIsNotUploaded,
                 });
                 break;
             }
         }
     } else {
-        res.status(500).json({ error: ErrorHandlerResponse.somethingWrong });
+        res.status(500).json({ error: ErrorHandlerResponse.SomethingWrong });
     }
 };
