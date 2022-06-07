@@ -2,7 +2,7 @@ import imageSize from 'image-size';
 import { readFileSync } from 'fs';
 import { ErrorCode } from '../errors/codes';
 import { LogicError } from '../errors/logic.error';
-import { resizeFile } from '../lib/image';
+import { resizeImage } from '../lib/file';
 import { FilesRepository } from '../repositories/files.repository';
 
 const imgType = 'image/';
@@ -30,9 +30,9 @@ export class AWSS3Service {
 
         const { height, width } = dimensions;
         if (!height || !width) {
-            throw new LogicError(ErrorCode.FileSizeNotFound);
+            throw new LogicError(ErrorCode.FileNotAppropriate);
         }
-        const appropriateSizeImg = await resizeFile({ file: savedFile, height, width });
+        const appropriateSizeImg = await resizeImage({ file: savedFile, height, width });
 
         const { Location } = await this.files.upload({
             mimetype,

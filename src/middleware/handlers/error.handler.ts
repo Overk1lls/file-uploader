@@ -10,6 +10,13 @@ enum ErrorHandlerResponse {
 export const RequestErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     if (err instanceof LogicError) {
         switch (err.code) {
+            case ErrorCode.FileNotAppropriate: {
+                res.status(400).json({
+                    error: err.message,
+                    code: err.code,
+                });
+            }
+            
             default: {
                 res.status(400).json({
                     error: 'File is not found!',

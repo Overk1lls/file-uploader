@@ -1,4 +1,3 @@
-import multer from "multer";
 import { Router } from "express";
 import { existsSync } from "fs";
 import { LogicError } from "../../errors/logic.error";
@@ -7,9 +6,8 @@ import { ServerError } from "../../errors/server.error";
 import { s3Service } from "../..";
 
 export const router = Router();
-export const upload = multer({ dest: './uploads' });
 
-router.post('/', upload.single('file'), async (req, res, next) => {
+router.post('/', async (req, res, next) => {
     try {
         const { file } = req;
         if (!file) {
