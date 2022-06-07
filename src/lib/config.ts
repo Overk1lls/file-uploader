@@ -33,10 +33,8 @@ export const extractConfig = (): Config => {
   }
 
   key = 'PORT';
-  const port = process.env[key];
-  if (!port) {
-    throw new Error(envErrorResponse);
-  }
+  const port = process.env[key] || '8080';
+  
   return {
     accessKeyId,
     secretAccessKey,
