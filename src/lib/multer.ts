@@ -14,7 +14,11 @@ const mimetypeRegex = /^(image|video|audio|application)\//;
 const fileSizeLimit = 52428800;
 const storage = multer.memoryStorage();
 
-const fileFilter = (req: IncomingMessage, file: Express.Multer.File, cb: FileFilterCallback) => {
+export const fileFilter = (
+  req: IncomingMessage,
+  file: Express.Multer.File,
+  cb: FileFilterCallback
+) => {
   const { mimetype } = file;
 
   if (mimetype.search(mimetypeRegex) === -1) {

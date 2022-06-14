@@ -31,4 +31,9 @@ export class AWSS3Service {
     const { Location } = await this.files.uploadFile({ ...file, buffer: appropriateSizeImg });
     return Location;
   }
+
+  async deleteFile(name: string) {
+    const { $response } = await this.files.deleteFile(name);
+    return $response;
+  }
 }

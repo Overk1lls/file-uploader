@@ -4,11 +4,12 @@
   "description": "Allows user to upload a file",
   "main": "./build/index.js",
   "scripts": {
-    "test": "test",
+    "test": "jest",
     "build": "rimraf ./build && tsc",
     "start": "node ./build/index.js",
     "start:dev": "tsnd --respawn ./src/index.ts",
-    "postinstall": "tsc"
+    "postinstall": "tsc",
+    "lint": "eslint ./src --fix"
   },
   "repository": {
     "type": "git",
@@ -21,7 +22,10 @@
   },
   "homepage": "https://overk1lls.github.io/file-uploader",
   "devDependencies": {
+    "@babel/preset-env": "^7.18.2",
+    "@babel/preset-typescript": "^7.17.12",
     "@types/express": "^4.17.13",
+    "@types/jest": "^28.1.1",
     "@types/multer": "^1.4.7",
     "@types/node": "^17.0.35",
     "@types/sharp": "^0.30.2",
@@ -29,6 +33,7 @@
     "eslint": "^8.17.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^28.1.1",
     "rimraf": "^3.0.2",
     "ts-node-dev": "^2.0.0-0",
     "typescript": "^4.7.2"

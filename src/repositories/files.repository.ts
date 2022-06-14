@@ -24,4 +24,12 @@ export class FilesRepository {
     };
     return this.s3.upload(fileDataObject).promise();
   }
+
+  deleteFile(name: string) {
+    const fileToDelete: S3.DeleteObjectRequest = {
+      Bucket: this.bucketName,
+      Key: bucketDirName + name,
+    };
+    return this.s3.deleteObject(fileToDelete).promise();
+  }
 }

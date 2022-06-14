@@ -9,5 +9,14 @@ const { port, ...s3Config } = localConfig;
 const filesRepo = new FilesRepository(s3Config);
 export const s3Service = new AWSS3Service(filesRepo);
 
-const app = createApp();
-app.listen(port, () => console.log(`App is running on port ${port}`));
+const start = async () => {
+  if (process.env.NODE_ENV !== 'test') {
+    const app = createApp();
+    app.listen(port, () => console.log(`App is running on port ${port}`));
+  }
+};
+
+start().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

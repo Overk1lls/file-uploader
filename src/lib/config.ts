@@ -6,39 +6,37 @@ export interface Config {
   accessKeyId: string;
   secretAccessKey: string;
   bucketName: string;
-  port: string;
+  port: number;
 }
 
-export const awsEnvPrefix = 'AWS_';
+const awsEnvPrefix = 'AWS_';
 
-export const extractConfig = (): Config => {
+export function extractConfig(): Config {
   let key = awsEnvPrefix + 'ACCESS_KEY_ID';
-  const envErrorResponse = `Env ${key} is missing!`;
 
   const accessKeyId = process.env[key];
   if (!accessKeyId) {
-    throw new Error(envErrorResponse);
+    throw new Error(`Env ${key} is missing!`);
   }
 
   key = awsEnvPrefix + 'SECRET_ACCESS_KEY';
   const secretAccessKey = process.env[key];
   if (!secretAccessKey) {
-    throw new Error(envErrorResponse);
+    throw new Error(`Env ${key} is missing!`);
   }
 
   key = awsEnvPrefix + 'BUCKET_NAME';
   const bucketName = process.env[key];
   if (!bucketName) {
-    throw new Error(envErrorResponse);
+    throw new Error(`Env ${key} is missing!`);
   }
 
-  key = 'PORT';
-  const port = process.env[key] || '8080';
-  
+  const port = Number.parseInt(process.env['PORT'] ?? '8080');
+
   return {
     accessKeyId,
     secretAccessKey,
     bucketName,
     port,
   };
-};
+}
